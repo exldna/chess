@@ -1,43 +1,39 @@
-from numpy import ndarray
+from chess.board import Board, BoardBehaviour, BoardAccess, WhiteBoardAccess, BlackBoardAccess
+from chess.move import Move, Position
 
-from chess.board import Board
-from chess.move import Move
+
+class PlayerBehaviour:
+    @staticmethod
+    def get_possible_moves(board_access: BoardAccess) -> list[Move]:
+        possible_moves = list()
+        for x in range(8):
+            for y in range(8):
+                curr_position = Position(x, y)
+                if 0 < board_access[curr_position] < 7:
+                    piece = BoardBehaviour.at(board_access, curr_position)
+                    possible_moves += piece.get_moves(board_access, curr_position)
+        return possible_moves
 
 
 class Player:
-    def __init__(self):
-        self.controller = None
-
-    def set_controller(self, controller):
-        self.controller = controller
-
-    def get_move(self) -> Move:
+    def get_move(self, controller) -> Move:
         pass
 
 
 class PlayerController:
-    def __init__(self, board: Board, player: Player):
-        self.board = board
+    def __init__(self, board_access: BoardAccess, player: Player):
+        self.board_access = board_access
         self.player = player
 
-    def get_possible_moves(self, board_map: ndarray) -> list[Move]:
-        pass # TODO: write this
-
     def move(self):
-        pass
+        BoardBehaviour.move(self.board_access, self.player.get_move(self))
 
 
-class WhiteController(PlayerController):
+class WhitePlayerController(PlayerController):
     def __init__(self, board: Board, player: Player):
-        super().__init__(board, player)
-
-    def move(self):
-        self.board.move(self.player.get_move())
+        super().__init__(WhiteBoardAccess(board), player)
 
 
-class BlackController(PlayerController):
+class BlackPlayerController(PlayerController):
     def __init__(self, board: Board, player: Player):
-        super().__init__(board, player)
-
-    def move(self):
-        self.board.move(self.player.get_move())
+        super().__init__(BlackBoardAccess(board), player)

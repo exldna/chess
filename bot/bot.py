@@ -2,7 +2,7 @@ from chess.board import Board
 from chess.player import Player, PlayerController
 from chess.move import Move
 
-from numpy import ndarray, copy
+from numpy import ndarray
 
 
 class Bot(Player):
@@ -16,25 +16,26 @@ class Bot(Player):
         return sum([self.advantage_map[board_map[i][j]][i][j] + self.pieces_cost[board_map[i][j]]
                     for i in range(8) for j in range(8)])
 
-    def move_analysis(self, x: int, board_map: ndarray) -> int:
+    def move_analysis(self, controller: PlayerController, x: int, board_map: ndarray) -> int:
         if x == 0:
             return self.position_analysis(board_map)
         bot_advantage = -10000
         player_advantage = 10000
-        for move in self.controller.get_possible_moves(board_map):
-            advantage = self.move_analysis(x - 1, Board.apply(copy(board_map), move))
-            if bot_advantage < advantage:
-                bot_advantage = advantage
+        for move1 in controller.get_possible_moves(board_map):
+            for move2 in controller.get_possible_moves(controller.board.moved(move1)):
+                advantage = self.move_analysis(controller, x - 1,
+                                               Board.apply(controller.board.moved(move1), move2))
+                if bot_advantage < advantage:
+                    bot_advantage = advantage
             if player_advantage > bot_advantage:
                 player_advantage = bot_advantage
         return player_advantage
 
-    def get_move(self) -> Move:
-        possible_moves = self.controller.get_possible_moves(self.controller.board.map)
-        best_move = possible_moves[0]
-        best_advantage = self.move_analysis(self.level, self.controller.board.moved(best_move))
-        for move in possible_moves[1:]:
-            advantage = self.move_analysis(self.level, self.controller.board.moved(move))
+    def get_move(self, controller: PlayerController) -> Move:
+        best_move = Move()
+        best_advantage = -10000
+        for move in controller.get_possible_moves(controller.board.map):
+            advantage = self.move_analysis(controller, self.level, controller.board.moved(move))
             if advantage > best_advantage:
                 best_move = move
                 best_advantage = advantage

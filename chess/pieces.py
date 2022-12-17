@@ -1,37 +1,47 @@
-from chess.move import Position
+from chess.board import BoardAccess, BoardBehaviour
+from chess.move import Position, Move
 
 
 class Piece:
-    def get_moves(self) -> list[Position]:
+    def get_moves(self, board_access: BoardAccess, position: Position) -> list[Move]:
         pass
 
 
 class Empty(Piece):
-    def get_moves(self) -> list[Position]:
-        return list()
+    def get_moves(self, board_access: BoardAccess, position: Position) -> list[Move]:
+        return []
 
 
 class Pawn(Piece):
-    def get_moves(self) -> list[Position]:
-        return [Position(0, 1)]
+    def get_moves(self, board_access: BoardAccess, position: Position) -> list[Move]:
+        if position.y >= 8:
+            return []
+        next_position = position + Position(0, 1)
+        if BoardBehaviour.at(board_access, next_position) != Empty:
+            return []
+        return [Move(position, next_position)]
 
 
 class Bishop(Piece):
-    def get_moves(self) -> list[Position]:
-        return [Position(0, 1)]
+    def get_moves(self, board_access: BoardAccess, position: Position) -> list[Move]:
+        pass
 
 
 class Knight(Piece):
-    pass
+    def get_moves(self, board_access: BoardAccess, position: Position) -> list[Move]:
+        pass
 
 
 class Rook(Piece):
-    pass
+    def get_moves(self, board_access: BoardAccess, position: Position) -> list[Move]:
+        pass
 
 
 class Queen(Piece):
-    pass
+    def get_moves(self, board_access: BoardAccess, position: Position) -> list[Move]:
+        pass
 
 
 class King(Piece):
-    pass
+    def get_moves(self, board_access: BoardAccess, position: Position) -> list[Move]:
+        pass
