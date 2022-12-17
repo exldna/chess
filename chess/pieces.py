@@ -1,4 +1,4 @@
-from chess.position import Position
+from chess.move import Position
 
 
 class Piece:

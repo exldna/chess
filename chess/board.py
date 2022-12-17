@@ -1,6 +1,6 @@
 from numpy import zeros, ndarray, dtype
-from chess.position import Position
-from chess.pieces import *
+from chess.move import Position, Move
+from chess.pieces import Piece, Empty, Pawn, Bishop, Knight, Rook, Queen, King
 
 
 class Board:
@@ -16,17 +16,13 @@ class Board:
             King()
         ]
 
-    def at(self, pos: Position):
-        return self.pieces_types[self.map[pos.x][pos.y]]
+    def at(self, position: Position):
+        return self.pieces_types[self.map[position.x][position.y]]
 
-    def do_move(self, start: Position, end: Position):
-        self.map[end.x][end.y] = self.map[start.x][start.y]
-        self.map[start.x][start.y] = 0
-
-    def move(self, start: Position, end: Position) -> None | Piece:
-        # TODO: validate
-        tmp = self.at(end)
-        self.do_move(start, end)
+    def move(self, move: Move) -> None | Piece:
+        tmp = self.at(move.end)
+        self.map[move.end.x][move.end.y] = self.map[move.begin.x][move.begin.y]
+        self.map[move.begin.x][move.begin.y] = 0
         return tmp
 
     def is_terminated(self):
