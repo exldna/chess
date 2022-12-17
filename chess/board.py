@@ -16,14 +16,15 @@ class Board:
             King()
         ]
 
-    def at(self, position: Position):
+    def at(self, position: Position) -> Piece:
         return self.pieces_types[self.map[position.x][position.y]]
 
     def move(self, move: Move) -> None | Piece:
-        tmp = self.at(move.end)
+        # TODO: validate
+        eat = self.at(move.end)
         self.map[move.end.x][move.end.y] = self.map[move.begin.x][move.begin.y]
         self.map[move.begin.x][move.begin.y] = 0
-        return tmp
+        return eat
 
     def is_terminated(self):
         return False

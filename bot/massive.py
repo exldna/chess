@@ -1,6 +1,6 @@
-from numpy import *
+from numpy import array
 
-avantage_map: ndarray = array([
+advantage_map = array([
     [
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
