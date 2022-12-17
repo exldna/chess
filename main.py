@@ -1,9 +1,5 @@
-from chess import Chess
-
-
 def main():
-    chess_instance = Chess()
-    chess_instance.play()
+    pass
 
 
 if __name__ == "__main__":
