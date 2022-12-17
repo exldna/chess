@@ -1,8 +1,7 @@
-from numpy import ndarray #for C - lists
 from chess.board import Board
 from chess.player import Player
-from chess.position import Position
-from chess.massive import *
+from chess.move import Position
+from massive import *
 
 class Bot(Player):
     def __init__(self, level, advantage_map: ndarray):
