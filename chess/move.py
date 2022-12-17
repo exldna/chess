@@ -8,6 +8,6 @@ class Position:
 
 
 class Move:
-    def __init__(self, begin: Position = (0, 0), end: Position = (0, 0)):
+    def __init__(self, begin: Position = None, end: Position = None):
         self.begin = begin
         self.end = end

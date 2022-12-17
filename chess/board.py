@@ -26,7 +26,7 @@ class WhiteBoardAccess(BoardAccess):
     def __init__(self, board: Board):
         super().__init__(board)
 
-    def __setitem__(self, position: Position, value):
+    def __setitem__(self, position: Position, value: int):
         self.m[position.x][position.y] = value
 
     def __getitem__(self, position: Position) -> int:
@@ -38,10 +38,10 @@ class BlackBoardAccess(BoardAccess):
         super().__init__(board)
 
     def __setitem__(self, position: Position, value):
-        self.m[position.x][7 - position.y] = value
+        self.m[position.x][7 - position.y] = value + 10
 
     def __getitem__(self, position: Position) -> int:
-        return self.m[position.x][7 - position.y]
+        return self.m[position.x][7 - position.y] - 10
 
 
 class BoardBehaviour:
