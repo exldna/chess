@@ -5,5 +5,5 @@ class Player:
     def __init__(self):
         pass
 
-    def move(self) -> (Position, Position):
+    def move(self) -> tuple[Position]:
         pass
