@@ -7,7 +7,10 @@ class Chess:
         self.board = Board()
 
         self.white = WhiteController(self.board, white)
+        self.white.player.set_controller(self.white)
+
         self.black = BlackController(self.board, black)
+        self.black.player.set_controller(self.black)
 
     def play(self):
         while not self.board.is_terminated():
