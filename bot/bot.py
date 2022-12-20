@@ -1,6 +1,6 @@
-from chess.board import Board
-from chess.player import Player, PlayerController
-from chess.move import Move
+from chess.player import Player
+from chess.move import Move, positions
+from chess.board import BoardStateAccess, BoardNode
 
 from numpy import ndarray
 
@@ -12,30 +12,48 @@ class Bot(Player):
         self.advantage_map = advantage_map
         self.pieces_cost = pieces_cost
 
-    def position_analysis(self, board_map: ndarray) -> int:  # analys any board-position for bot
-        return sum([self.advantage_map[board_map[i][j]][i][j] + self.pieces_cost[board_map[i][j]]
-                    for i in range(8) for j in range(8)])
+    def position_analysis(self, board_access: BoardStateAccess) -> int:
+        advantage = 0
+        for position in positions:
+            piece = board_access[position]
+            if piece == 0:
+                continue
+            if 0 < piece < 7:
+                advantage -= self.advantage_map[piece][position.x][position.y]
+                advantage -= self.pieces_cost[piece]
+            else:
+                if piece < 0:
+                    piece += 10
+                elif piece > 7:
+                    piece -= 10
+                advantage += self.advantage_map[piece][position.x][position.y]
+                advantage += self.pieces_cost[piece]
+        return advantage
 
-    def move_analysis(self, controller: PlayerController, x: int, board_map: ndarray) -> int:
+    def move_analysis(self, x: int, board_node: BoardNode) -> int:
         if x == 0:
-            return self.position_analysis(board_map)
-        bot_advantage = -10000
-        player_advantage = 10000
-        for move1 in controller.get_possible_moves(board_map):
-            for move2 in controller.get_possible_moves(controller.board.moved(move1)):
-                advantage = self.move_analysis(controller, x - 1,
-                                               Board.apply(controller.board.moved(move1), move2))
+            return self.position_analysis(board_node.state_access)
+        bot_advantage = -1000000
+        player_advantage = 1000000
+        for move1 in board_node.possible_moves:
+            moved_board_1: BoardNode = board_node.apply(move1)
+            for move2 in moved_board_1.possible_moves:
+                moved_board_2 = moved_board_1.apply(move2)
+                advantage = self.move_analysis(x - 1, moved_board_2)
                 if bot_advantage < advantage:
                     bot_advantage = advantage
             if player_advantage > bot_advantage:
                 player_advantage = bot_advantage
         return player_advantage
 
-    def get_move(self, controller: PlayerController) -> Move:
-        best_move = Move()
+    def get_move(self, board_node: BoardNode) -> Move:
+        best_move = None
         best_advantage = -10000
-        for move in controller.get_possible_moves(controller.board.map):
-            advantage = self.move_analysis(controller, self.level, controller.board.moved(move))
+        # print(board_node.turn.side, len(board_node.possible_moves), '\n',
+        #       *map(lambda x: str(x) + '\n', board_node.possible_moves))
+        for move in board_node.possible_moves:
+            moved_board = board_node.apply(move)
+            advantage = self.move_analysis(self.level, moved_board)
             if advantage > best_advantage:
                 best_move = move
                 best_advantage = advantage
