@@ -1,6 +1,7 @@
 from chess.player import Player
-from chess.move import Move, positions
+from chess.move import Move
 from chess.board import BoardStateAccess, BoardNode
+from chess.definitions import positions
 
 from numpy import ndarray
 

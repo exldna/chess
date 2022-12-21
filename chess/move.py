@@ -29,6 +29,3 @@ class Move:
 
     def __hash__(self):
         return hash((self.begin.x, self.begin.y, self.end.x, self.end.y))
-
-
-positions = [Position(x, y) for x in range(8) for y in range(8)]

@@ -1,7 +1,7 @@
 from numpy import dtype, array
 
-from chess.board import Board, BoardState
 from chess.player import Player, PlayerController
+from chess.board import Board, BoardState
 
 
 class Chess:

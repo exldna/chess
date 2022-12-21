@@ -32,15 +32,15 @@ class Pawn(PieceType):
 
 class Bishop(PieceType):
     def get_possible_moves(self, board_access, position: Position) -> list[Move]:
-        diags = [
+        diagonals = [
             [Position(position.x - i, position.y + i) for i in range(1, min(position.x, 7 - position.y) + 1)],
             [Position(position.x - i, position.y - i) for i in range(1, min(position.x, position.y) + 1)],
             [Position(position.x + i, position.y - i) for i in range(1, min(7 - position.x, position.y) + 1)],
             [Position(position.x + i, position.y + i) for i in range(1, min(7 - position.x, 7 - position.y) + 1)]
         ]
         possible_moves: list = []
-        for diag in diags:
-            for coord in diag:
+        for diagonal in diagonals:
+            for coord in diagonal:
                 possible_moves.append(Move(position, coord))
                 if board_access[coord] != 0:
                     break
@@ -127,17 +127,6 @@ class King(PieceType):
         if position.x + 1 < 8:
             possible_moves.append(Move(position, position + Position(1, 0)))
         return possible_moves
-
-
-pieces_types = [
-    Empty(),
-    Pawn(),
-    Bishop(),
-    Knight(),
-    Rook(),
-    Queen(),
-    King()
-]
 
 
 class PieceOnBoard:

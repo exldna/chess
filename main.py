@@ -1,20 +1,5 @@
-from numpy import array, dtype
-
-from bot.bot import Bot
-from bot.massive import advantage_map, pieces_cost
+from bot import Bot, advantage_map, pieces_cost
 from chess import Chess
-from chess.board import BoardState
-
-start_state = BoardState(array([
-        [1, 0, 0, 0, 0, 0, 0, 11],
-        [1, 0, 0, 0, 0, 0, 0, 11],
-        [1, 0, 0, 0, 0, 0, 0, 11],
-        [1, 0, 0, 0, 0, 0, 0, 11],
-        [1, 0, 0, 0, 0, 0, 0, 11],
-        [1, 0, 0, 0, 0, 0, 0, 11],
-        [1, 0, 0, 0, 0, 0, 0, 11],
-        [1, 0, 0, 0, 0, 0, 0, 11],
-    ], dtype=dtype("i1")))
 
 
 def main():

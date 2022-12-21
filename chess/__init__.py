@@ -1,1 +1,1 @@
-from chess.chess import Chess
+from chess.game import Chess

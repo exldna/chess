@@ -1,11 +1,13 @@
-from numpy import ndarray, copy as np_copy
-from chess.move import Position, Move, positions
-from chess.pieces import pieces_types, PieceOnBoard
+from numpy import array, dtype, copy as np_copy
+
+from chess.move import Position, Move
+from chess.pieces import PieceOnBoard
+from chess.definitions import pieces_types, positions
 
 
 class BoardState:
-    def __init__(self, state: ndarray):
-        self.state = state
+    def __init__(self, state: list[list[int]]):
+        self.state = array(state, dtype=dtype("i1"))
 
     def __getitem__(self, position: Position) -> int:
         return self.state[position.x][position.y]
